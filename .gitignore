@@ -1,0 +1,21 @@
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### VS Code ###
+.vscode/
+**/.project
+**/.settings
+
+### MacOS ###
+.DS_Store
+._*
+Thumbs.db
+.Spotlight-V100
+.Trashes
+
+### VIM ###
+*.swp
+.vim/

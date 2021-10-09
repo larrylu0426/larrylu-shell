@@ -1,0 +1,44 @@
+{
+  "segments":{
+    "right":[
+      {
+        "function":"powerline.segments.common.net.network_load",
+        "priority":50
+      },
+      {
+        "function":"powerline.segments.common.sys.cpu_load_percent",
+        "priority":50
+      },
+      {
+        "function":"powerlinemem.mem_usage.mem_usage",
+        "priority":50
+      },
+      {
+        "function":"powerline.segments.common.bat.battery",
+        "priority":50
+      },
+      {
+        "function":"powerline.segments.common.wthr.weather",
+        "priority":50,
+        "args":{
+          "unit":"C",
+          "location_query":"wroclaw, poland"
+        }
+      },
+      {
+        "function":"powerline.segments.common.time.date"
+      },
+      {
+        "function":"powerline.segments.common.time.date",
+        "name":"time",
+        "args":{
+          "format":"%H:%M",
+          "istime":true
+        }
+      },
+      {
+        "function":"powerline.segments.common.net.hostname"
+      }
+    ]
+  }
+}
