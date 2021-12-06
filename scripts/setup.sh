@@ -19,7 +19,8 @@ function error() {
 function ubuntu_exec() {
     if [ "$platform" == 'Linux' ]; then
         if [ "$os" == 'ubuntu' ]; then
-            eval $1
+            cmd_line=$*
+            eval $cmd_line
         fi
     fi
 }
@@ -27,14 +28,16 @@ function ubuntu_exec() {
 function centos_exec() {
     if [ "$platform" == 'Linux' ]; then
         if [ "$os" == 'centos' ]; then
-            eval $1
+            cmd_line=$*
+            eval $cmd_line
         fi
     fi
 }
 
 function macos_exec() {
     if [ "$platform" == 'Darwin' ]; then
-        eval $1
+        cmd_line=$*
+        eval $cmd_line
     fi
 }
 
@@ -59,26 +62,34 @@ function setup() {
     ubuntu_exec "sudo apt update"
 
     # install base-dependency items
-    if [ "$platform" == 'Darwin' ]; then
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-    fi
+    macos_exec 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
+    macos_exec '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+    macos_exec  'eval "$(/opt/homebrew/bin/brew shellenv)"'
 
     app_cmd install sudo
-    app_cmd install curl curl-devel
-    app_cmd install wget
-    app_cmd install git
-    app_cmd install exuberant-ctags ctags-etags ctags
-    app_cmd install silversearcher-ag silver_searcher silver_searcher
+
     app_cmd install zsh
+
+    app_cmd install git
+
+    app_cmd install curl curl-devel
+
+    app_cmd install wget
+
+    app_cmd install exuberant-ctags ctags-etags ctags
+
+    app_cmd install silversearcher-ag silver_searcher the_silver_searcher
+
     app_cmd install sed sed gnu-sed
     sed_cmd=$([ $platform == 'Linux' ] && echo 'sed' || echo 'gsed')
 
     # oh-my-zsh
     sudo chsh -s /bin/zsh $USER
     curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
-    $sed_cmd -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/g'  $HOME/.zshrc
-    macos_exec echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zshrc
+    $sed_cmd -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/g' $HOME/.zshrc
+
+    macos_exec "echo 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"' >> $HOME/.zshrc"
+    macos_exec 'echo "eval \"\$(/opt/homebrew/bin/brew shellenv)\"" >> $HOME/.zshrc'
 
     # zsh-syntax-highlighting
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting
@@ -95,9 +106,9 @@ function setup() {
     app_cmd install python-dev python-devel
     curl -L https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo python
 
-    pip install pip -U  -i https://mirrors.tencent.com/pypi/simple
+    pip install pip -U  -i https://pypi.tuna.tsinghua.edu.cn/simple
     pip install --upgrade setuptools
-    pip config set global.index-url https://mirrors.tencent.com/pypi/simple
+    pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
     PYTHON_LOCAL_PATH=$([ $platform == 'Linux' ] && echo '$HOME/.local/bin' || echo '$HOME/Library/Python/2.7/bin')
     echo export PATH="$PYTHON_LOCAL_PATH:\$PATH" >> $HOME/.zshrc
