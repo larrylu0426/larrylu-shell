@@ -63,8 +63,11 @@ function setup() {
 
     # install base-dependency items
     macos_exec 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
-    macos_exec '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
-    macos_exec  'eval "$(/opt/homebrew/bin/brew shellenv)"'
+    macos_exec 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
+    macos_exec 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
+    macos_exec 'git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git /tmp/brew-install'
+    macos_exec '/bin/bash /tmp/brew-install/install.sh'
+    macos_exec 'eval "$(/opt/homebrew/bin/brew shellenv)"'
 
     app_cmd install sudo
 
@@ -88,7 +91,6 @@ function setup() {
     curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
     $sed_cmd -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/g' $HOME/.zshrc
 
-    macos_exec "echo 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"' >> $HOME/.zshrc"
     macos_exec 'echo "eval \"\$(/opt/homebrew/bin/brew shellenv)\"" >> $HOME/.zshrc'
 
     # zsh-syntax-highlighting
@@ -141,19 +143,20 @@ function setup() {
     if [ "$platform" == 'Darwin' ]; then
         brew install lua
         ./configure --with-features=huge --enable-cscope --enable-rubyinterp --enable-largefile --disable-netbeans --enable-pythoninterp --with-python-config-dir=/usr/lib/python2.7/config --enable-perlinterp --enable-luainterp --enable-fail-if-missing --with-lua-prefix=/opt/homebrew/Cellar/lua/5.4.3
+        make -j$(sysctl -n machdep.cpu.core_counts)
     fi
     if [ "$platform" == 'Linux' ]; then
         if [ "$os" == 'ubuntu' ]; then
-            sudo apt-get remove -y vim vim-runtime  vim-tiny vim-common vim-gui-common
-            sudo apt-get purge  -y vim vim-runtime  vim-tiny vim-common vim-gui-common
+            sudo apt-get remove -y vim vim-runtime vim-tiny vim-common vim-gui-common
+            sudo apt-get purge  -y vim vim-runtime vim-tiny vim-common vim-gui-common
             sudo apt-get install -y luajit libncurses-dev ruby-dev mercurial libperl-dev
         elif [ "$os" == 'centos' ]; then
             sudo yum remove -y vim-enhanced vim-common vim-filesystem vim-minimal
             sudo yum install -y luajit luajit-devel ncurses ncurses-devel ruby ruby-devel mercurial perl perl-devel lua-devel
         fi
         ./configure --with-features=huge --enable-cscope --enable-rubyinterp --enable-largefile --disable-netbeans --enable-pythoninterp --with-python-config-dir=/usr/lib/python2.7/config --enable-perlinterp --enable-luainterp --with-luajit --enable-fail-if-missing --with-lua-prefix=/usr --enable-gui=gnome2 --enable-cscope --prefix=/usr
+        make -j$(cat /proc/cpuinfo| grep "processor"| wc -l)
     fi
-    make -j$(cat /proc/cpuinfo| grep "processor"| wc -l)
     sudo make install
     success "Installation done"
 }
