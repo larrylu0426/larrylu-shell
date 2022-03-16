@@ -105,10 +105,10 @@ function setup() {
     $sed_cmd -i 's/~\/.fzf.zsh/~\/.oh-my-zsh\/plugins\/fzf.zsh/g'  $HOME/.zshrc
 
     # install python-related items
-    app_cmd install python-dev python-devel
-    curl -L https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo python
+    app_cmd install python3-dev python3-devel
+    curl -L https://bootstrap.pypa.io/pip/get-pip.py | sudo python3
 
-    pip install pip -U  -i https://pypi.tuna.tsinghua.edu.cn/simple
+    pip3 install pip -U  -i https://pypi.tuna.tsinghua.edu.cn/simple
     pip install --upgrade setuptools
     pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
@@ -126,9 +126,9 @@ function setup() {
     echo 'set-option -g default-shell /bin/zsh' >> $tmux_file
     echo 'set -g mouse on' >> $tmux_file
     if [ "$platform" == 'Linux' ]; then
-        sudo cp assets/tmux-themes-default.json $HOME/.local/lib/python2.7/site-packages/powerline/config_files/themes/tmux/default.json
-        sudo cp assets/tmux-colorschemes-default.json $HOME/.local/lib/python2.7/site-packages/powerline/config_files/colorschemes/default.json
-        echo source "$HOME/.local/lib/python2.7/site-packages/powerline/bindings/tmux/powerline.conf" >> $tmux_file
+        sudo cp assets/tmux-themes-default.json $HOME/.local/lib/python3.8/site-packages/powerline/config_files/themes/tmux/default.json
+        sudo cp assets/tmux-colorschemes-default.json $HOME/.local/lib/python3.8/site-packages/powerline/config_files/colorschemes/default.json
+        echo source "$HOME/.local/lib/python3.8/site-packages/powerline/bindings/tmux/powerline.conf" >> $tmux_file
     elif [ "$platform" == 'Darwin' ]; then
         sudo cp assets/tmux-themes-default.json $HOME/Library/Python/2.7/lib/python/site-packages/powerline/config_files/themes/tmux/default.json
         sudo cp assets/tmux-colorschemes-default.json $HOME/Library/Python/2.7/lib/python/site-packages/powerline/config_files/colorschemes/default.json
