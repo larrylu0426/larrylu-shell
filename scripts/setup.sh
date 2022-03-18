@@ -112,7 +112,7 @@ function setup() {
     pip install --upgrade setuptools
     pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
-    PYTHON_LOCAL_PATH=$([ $platform == 'Linux' ] && echo '$HOME/.local/bin' || echo '$HOME/Library/Python/2.7/bin')
+    PYTHON_LOCAL_PATH=$([ $platform == 'Linux' ] && echo '$HOME/.local/bin' || echo '$HOME/Library/Python/3.8/bin')
     echo export PATH="$PYTHON_LOCAL_PATH:\$PATH" >> $HOME/.zshrc
 
     # powerline-status
@@ -130,9 +130,9 @@ function setup() {
         sudo cp assets/tmux-colorschemes-default.json $HOME/.local/lib/python3.8/site-packages/powerline/config_files/colorschemes/default.json
         echo source "$HOME/.local/lib/python3.8/site-packages/powerline/bindings/tmux/powerline.conf" >> $tmux_file
     elif [ "$platform" == 'Darwin' ]; then
-        sudo cp assets/tmux-themes-default.json $HOME/Library/Python/2.7/lib/python/site-packages/powerline/config_files/themes/tmux/default.json
-        sudo cp assets/tmux-colorschemes-default.json $HOME/Library/Python/2.7/lib/python/site-packages/powerline/config_files/colorschemes/default.json
-        echo source "$HOME/Library/Python/2.7/lib/python/site-packages/powerline/bindings/tmux/powerline.conf" >> $tmux_file
+        sudo cp assets/tmux-themes-default.json $HOME/Library/Python/3.8/lib/python/site-packages/powerline/config_files/themes/tmux/default.json
+        sudo cp assets/tmux-colorschemes-default.json $HOME/Library/Python/3.8/lib/python/site-packages/powerline/config_files/colorschemes/default.json
+        echo source "$HOME/Library/Python/3.8/lib/python/site-packages/powerline/bindings/tmux/powerline.conf" >> $tmux_file
     fi
     mv $tmux_file $HOME/
     app_cmd install tmux
